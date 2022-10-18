@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-export interface ShiftProduct {
+interface ShiftProduct {
   id: string,
   type: string,
   attributes:  {
@@ -12,7 +12,7 @@ export interface ShiftProduct {
   relationships: any
 }
 
-interface Product {
+export interface Product {
   id: string
   canonical_path: string
   public_primary_asset_file_url: string
