@@ -1,5 +1,41 @@
 const axios = require('axios');
 
+export interface ShiftProduct {
+  id: string,
+  type: string,
+  attributes:  {
+    canonical_path: string
+    public_primary_asset_file_url: string
+    reference: string
+    title: string
+  },
+  relationships: any
+}
+
+interface Product {
+  id: string
+  canonical_path: string
+  public_primary_asset_file_url: string
+  reference: string
+  title: string
+}
+
+/**
+ * Flattens API product attributes
+ */
+function transformProducts(products: ShiftProduct[]): Product[] {
+  return (products  || []).reduce((accumulator: Product[], product: Partial<ShiftProduct>) => {
+      accumulator.push({
+        id: product?.id || '',
+        canonical_path: product?.attributes?.canonical_path || '',
+        public_primary_asset_file_url: product?.attributes?.public_primary_asset_file_url || '',
+        reference: product?.attributes?.reference || '',
+        title: product?.attributes?.title || '',
+      })
+    return accumulator
+  }, [])
+}
+
 /**
  * Products API Endpoint
  *
@@ -19,7 +55,7 @@ export const handler = async () => {
     } = process.env
 
     /** Platform API call for products */
-    const response = await axios.get(`${API_HOST}/${API_TENANT}/v2/products?include=variants&fields[variants]=reference,sku&fields[products]=title,reference`, {
+    const response = await axios.get(`${API_HOST}/${API_TENANT}/v2/products?fields[products]=title,reference,canonical_path,public_primary_asset_file_url`, {
       auth: {
         username: API_TENANT,
         password: API_ACCESS_TOKEN,
@@ -33,7 +69,7 @@ export const handler = async () => {
 
     return { 
       statusCode: 200,
-      body: response?.data?.data ? JSON.stringify({ data: response?.data?.data }) : []
+      body: JSON.stringify({ data: transformProducts(response?.data?.data) })
     };
   } catch (error) {
     console.log(error);
