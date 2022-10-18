@@ -1,0 +1,8 @@
+---
+const products = await fetch(`/.netlify/functions/get-product-list`)
+console.log({products: JSON.stringify(products)})
+---
+<section>
+  <h1>Products</h1>
+
+</section>
