@@ -1,6 +1,10 @@
 import type { Handler } from '@netlify/functions'
 const axios = require('axios');
 
+type MetaAttribute = {
+  [key: string]: string
+}
+
 interface ShiftProduct {
   id: string,
   type: string,
@@ -9,6 +13,8 @@ interface ShiftProduct {
     public_primary_asset_file_url: string
     reference: string
     title: string
+    max_current_price: number
+    meta_attributes: MetaAttribute
   },
   relationships: any
 }
@@ -19,25 +25,29 @@ export interface Product {
   public_primary_asset_file_url: string
   reference: string
   title: string
+  max_current_price: number
+  meta_attributes: MetaAttribute
 }
 
 /**
  * Flattens API product attributes
  */
-function transformProduct(product: ShiftProduct): Product[] {
+function transformProduct(product: Partial<ShiftProduct>): Product[] {
   return {
     id: product?.id || '',
     canonical_path: product?.attributes?.canonical_path || '',
     public_primary_asset_file_url: product?.attributes?.public_primary_asset_file_url || '',
     reference: product?.attributes?.reference || '',
     title: product?.attributes?.title || '',
+    max_current_price: product?.attributes?.max_current_price || 0,
+    meta_attributes: product?.attributes?.meta_attributes || {},
   }
 }
 
 /**
  * Product API Endpoint
  *
- * Purpose: Fetches Product from Platform API
+ * Purpose: Fetches a Product from Platform API
  *
  * Example:
  * ```
@@ -64,7 +74,6 @@ export const handler: Handler = async (event) => {
         'User-Agent': 'SHIFT Commerce mm astro demo',
       },
     })
-    console.log('handler', { response })
 
     return { 
       statusCode: 200,

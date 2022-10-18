@@ -1,0 +1,14 @@
+---
+import type { Product } from "../../netlify/functions/get-product-list";
+
+const { id } = Astro.params;
+const response = await fetch(`https://precious-manatee-ee242e.netlify.app/.netlify/functions/get-product?id=${id}`);
+const body = await response.json();
+const product: Product = body.data;
+---
+<div>
+  <img src={product?.public_primary_asset_file_url} alt={product.title} class="h-full w-full object-cover object-center lg:h-full lg:w-full"/>
+  {product?.title}
+  {product?.canonical_path}
+  {product?.meta_attributes}
+</div>
