@@ -2,7 +2,9 @@ import type { Handler } from '@netlify/functions'
 const axios = require('axios');
 
 type MetaAttribute = {
-  [key: string]: string
+  [key: string]: {
+    value: string
+  }
 }
 
 interface ShiftProduct {
