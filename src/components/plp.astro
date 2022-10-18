@@ -1,8 +1,11 @@
 ---
-const products = await fetch(`/.netlify/functions/get-product-list`)
-console.log({products: JSON.stringify(products)})
+const response = await fetch(`https://precious-manatee-ee242e.netlify.app/.netlify/functions/get-product-list`);
+const body = await response.json();
+const products = body.data;
+
+console.log({products})
 ---
 <section>
   <h1>Products</h1>
-
+  {JSON.stringify(products)}
 </section>
