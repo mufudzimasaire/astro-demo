@@ -13,13 +13,13 @@ const products: Product[] = body.data;
           <img src={product.public_primary_asset_file_url} alt={product.title} class="h-full w-full object-cover object-center lg:h-full lg:w-full"/>
         </div>
         <div class="mt-4 flex justify-between">
-          <div>
+          <div class='flex flex-col'>
             <h3 class="text-sm text-gray-700">
               <span aria-hidden="true" class="absolute inset-0"></span>
               {product.title}
             </h3>
+            <p class="text-sm font-medium text-gray-900">£19.99</p>
           </div>
-          <p class="text-sm font-medium text-gray-900">£19.99</p>
         </div>
       </div>
     )
